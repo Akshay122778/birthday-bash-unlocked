@@ -123,41 +123,25 @@ const AdvancedConfetti = ({ confettiKey }: { confettiKey: boolean }) => {
 
 const FloatingParticles = () => {
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-40">
-      {[...Array(50)].map((_, i) => (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-30">
+      {[...Array(60)].map((_, i) => (
         <div
           key={i}
           className="absolute rounded-full animate-float"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            width: `${Math.random() * 6 + 2}px`,
-            height: `${Math.random() * 6 + 2}px`,
+            width: `${Math.random() * 6 + 3}px`,
+            height: `${Math.random() * 6 + 3}px`,
             background: ["hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--secondary))"][
               Math.floor(Math.random() * 3)
             ],
             animationDelay: `${Math.random() * 8}s`,
             animationDuration: `${8 + Math.random() * 8}s`,
+            boxShadow: `0 0 ${Math.random() * 20 + 10}px currentColor`,
           }}
         />
       ))}
-    </div>
-  );
-};
-
-const WaveDivider = ({ flip = false }: { flip?: boolean }) => {
-  return (
-    <div className={`absolute left-0 w-full h-24 ${flip ? 'top-0' : 'bottom-0'} overflow-hidden ${flip ? 'rotate-180' : ''}`}>
-      <svg
-        viewBox="0 0 1200 120"
-        preserveAspectRatio="none"
-        className="relative block w-full h-full"
-      >
-        <path
-          d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
-          className="fill-background"
-        />
-      </svg>
     </div>
   );
 };
@@ -177,66 +161,54 @@ const PasswordGate = ({ onUnlock }: { onUnlock: () => void }) => {
   };
 
   return (
-    <div className="fixed inset-0 section-dark flex items-center justify-center z-50 overflow-hidden">
+    <div className="fixed inset-0 bg-background flex items-center justify-center z-50 overflow-hidden p-4">
       <FloatingParticles />
       
-      {/* Wavy bottom */}
-      <WaveDivider />
-      
-      <div className="relative z-10 w-full max-w-md px-6 animate-fadeIn">
-        <div className="text-center space-y-8">
+      <Card className="glass-card-hover max-w-md w-full relative z-10 shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.5)]">
+        <CardContent className="p-8 md:p-12 text-center space-y-8">
           {/* Emoji */}
           <div className="text-8xl animate-bounce">🎂</div>
           
           {/* Badge */}
-          <div className="flex justify-center">
+          <div>
             <span className="badge-pill">Special Access</span>
           </div>
           
           {/* Heading */}
           <div className="space-y-4">
-            <h1 className="text-5xl md:text-6xl font-black text-[hsl(var(--dark-foreground))] leading-tight">
-              Birthday
-              <br />
-              <span className="gradient-text">Celebration</span>
+            <h1 className="text-4xl md:text-5xl font-black text-foreground leading-tight">
+              <span className="gradient-text font-display">Birthday Celebration</span>
             </h1>
-            <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full" />
+            <p className="text-muted-foreground text-base">
+              Enter the password to unlock the surprise
+            </p>
           </div>
           
           {/* Password form */}
-          <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-2xl">
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-[hsl(var(--dark-foreground))/80]">
-                    Enter Password
-                  </label>
-                  <Input
-                    type="password"
-                    value={password}
-                    onChange={(e) => {
-                      setPassword(e.target.value);
-                      setError("");
-                    }}
-                    placeholder="••••••••"
-                    className="h-12 text-center text-lg bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-primary transition-all"
-                  />
-                  {error && (
-                    <p className="text-destructive text-sm text-center">{error}</p>
-                  )}
-                </div>
-                <Button
-                  type="submit"
-                  size="lg"
-                  className="w-full h-12 text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all shadow-lg"
-                >
-                  Unlock Celebration 🔓
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError("");
+              }}
+              placeholder="Enter password..."
+              className="h-12 text-center text-lg bg-input/50 border-border/60 focus:border-primary transition-all"
+            />
+            {error && (
+              <p className="text-destructive text-sm animate-pulse">{error}</p>
+            )}
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full h-12 text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.6)] transition-all hover:scale-105 active:scale-95"
+            >
+              Unlock 🔓
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
@@ -273,25 +245,22 @@ const CountdownTimer = ({ targetDate }: { targetDate: number }) => {
   }, [targetDate]);
 
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
-    <div className="flex flex-col items-center gap-2">
-      <div className="relative group">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all" />
-        <Card className="relative bg-card border-2 border-border hover:border-primary/50 transition-all shadow-soft hover:shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.3)] min-w-[70px] md:min-w-[90px]">
-          <CardContent className="p-4 md:p-6">
-            <div className="text-3xl md:text-5xl font-black gradient-text">
-              {String(value).padStart(2, "0")}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      <span className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-widest">
+    <div className="flex flex-col items-center gap-3">
+      <Card className="glass-card-hover min-w-[75px] md:min-w-[95px] shadow-[0_8px_30px_hsl(0_0%_0%_/_0.3)]">
+        <CardContent className="p-4 md:p-6">
+          <div className="text-3xl md:text-5xl font-black gradient-text">
+            {String(value).padStart(2, "0")}
+          </div>
+        </CardContent>
+      </Card>
+      <span className="text-xs md:text-sm font-bold text-muted-foreground uppercase tracking-widest">
         {label}
       </span>
     </div>
   );
 
   return (
-    <div className="flex justify-center gap-3 md:gap-6 flex-wrap">
+    <div className="flex justify-center gap-3 md:gap-5 flex-wrap">
       <TimeUnit value={time.days} label="Days" />
       <TimeUnit value={time.hours} label="Hours" />
       <TimeUnit value={time.minutes} label="Minutes" />
@@ -317,93 +286,75 @@ const Index = () => {
       <FloatingParticles />
       {triggerConfetti && <AdvancedConfetti confettiKey={triggerConfetti} />}
 
-      {/* Hero Section with Dark Background */}
-      <section className="section-dark relative min-h-[60vh] flex items-center justify-center py-20 md:py-32">
-        <WaveDivider />
-        
-        <div className="relative z-10 w-full max-w-4xl mx-auto px-6 text-center space-y-8 animate-fadeIn">
-          {/* Badge */}
-          <div>
-            <span className="badge-pill">October 27, 2025</span>
-          </div>
+      <main className="relative min-h-screen flex items-center justify-center p-4 md:p-8">
+        <div className="relative z-10 w-full max-w-4xl mx-auto space-y-10 md:space-y-12">
           
-          {/* Main Heading */}
-          <div className="space-y-6">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-[hsl(var(--dark-foreground))] leading-[1.1]">
-              Celebrating
-              <br />
-              <span className="gradient-text font-display">Ananya's Birthday</span>
-            </h1>
-            <div className="flex justify-center">
-              <div className="w-32 h-1.5 bg-gradient-to-r from-primary via-accent to-secondary rounded-full" />
-            </div>
-          </div>
-
-          {/* Scroll indicator */}
-          <div className="pt-12">
-            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 mx-auto">
-              <div className="w-1.5 h-3 bg-white/50 rounded-full animate-bounce" />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Content Section with Light Background */}
-      <section className="relative bg-background py-16 md:py-24">
-        <div className="w-full max-w-4xl mx-auto px-6 space-y-12">
-          
-          {/* Message Card */}
-          <div className="animate-slideUp">
-            <Card className="bg-card border-2 border-border hover:border-primary/30 transition-all shadow-soft hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.2)]">
-              <CardContent className="p-8 md:p-12">
-                <p className="text-lg md:text-2xl leading-relaxed text-center">
-                  I'm celebrating <span className="text-highlight">another year</span> with{" "}
-                  <span className="text-highlight">incredible memories</span> and{" "}
-                  <span className="text-highlight">amazing experiences</span>, looking forward to{" "}
-                  <span className="text-highlight">new adventures</span> and building{" "}
-                  <span className="text-highlight">unforgettable moments</span>.
-                </p>
-                
-                {/* Emojis */}
-                <div className="flex justify-center gap-6 mt-8 text-5xl">
-                  <span className="hover:scale-125 transition-transform cursor-pointer">✨</span>
-                  <span className="hover:scale-125 transition-transform cursor-pointer">🎉</span>
-                  <span className="hover:scale-125 transition-transform cursor-pointer">💖</span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* CTA Button */}
-          <div className="flex justify-center animate-slideUp" style={{ animationDelay: '0.2s' }}>
-            <Button
-              onClick={handleConfetti}
-              size="lg"
-              className="h-14 px-10 text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.4)] transition-all hover:scale-105 active:scale-95"
-            >
-              🎊 Launch Celebration
-            </Button>
-          </div>
-
-          {/* Countdown Section */}
-          <div className="pt-8 animate-slideUp" style={{ animationDelay: '0.4s' }}>
-            <div className="text-center mb-8">
-              <h2 className="text-3xl md:text-4xl font-black mb-2">
-                Countdown to the <span className="gradient-text">Big Day</span>
-              </h2>
-              <div className="flex justify-center mt-4">
-                <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary rounded-full" />
+          {/* Hero Card */}
+          <Card className="glass-card shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.5)] animate-fadeIn">
+            <CardContent className="p-8 md:p-12 space-y-8">
+              
+              {/* Badge */}
+              <div className="text-center">
+                <span className="badge-pill">October 27, 2025</span>
               </div>
-            </div>
-            <CountdownTimer targetDate={BIRTHDAY_DATE} />
-          </div>
-        </div>
-      </section>
+              
+              {/* Main Heading */}
+              <div className="text-center space-y-4">
+                <h1 className="text-5xl md:text-7xl font-black text-foreground leading-tight">
+                  Happy Birthday
+                  <br />
+                  <span className="gradient-text font-display">Ananya</span> 🎉
+                </h1>
+              </div>
 
-      {/* Footer */}
-      <footer className="py-8 text-center text-muted-foreground text-sm">
-        <p>Made with 💖 for Ananya's special day</p>
-      </footer>
+              {/* Message */}
+              <Card className="glass-card-hover shadow-[0_8px_30px_hsl(0_0%_0%_/_0.3)]">
+                <CardContent className="p-6 md:p-8">
+                  <p className="text-base md:text-xl leading-relaxed text-center text-foreground/90">
+                    Another year <span className="text-highlight">older</span>, another year{" "}
+                    <span className="text-highlight">wiser</span>, another year more{" "}
+                    <span className="text-highlight">beautiful</span>. Today is your day to{" "}
+                    <span className="text-highlight">shine</span>, to celebrate all the{" "}
+                    <span className="text-highlight">amazing things</span> you've accomplished, and to look forward to the{" "}
+                    <span className="text-highlight">incredible adventures</span> ahead. Make this birthday{" "}
+                    <span className="text-highlight">unforgettable!</span>
+                  </p>
+                  
+                  {/* Emojis */}
+                  <div className="flex justify-center gap-6 mt-6 text-4xl md:text-5xl">
+                    <span className="hover:scale-125 transition-transform cursor-pointer animate-pulse-slow">✨</span>
+                    <span className="hover:scale-125 transition-transform cursor-pointer animate-pulse-slow" style={{ animationDelay: '0.5s' }}>🎉</span>
+                    <span className="hover:scale-125 transition-transform cursor-pointer animate-pulse-slow" style={{ animationDelay: '1s' }}>💖</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* CTA Button */}
+              <div className="flex justify-center">
+                <Button
+                  onClick={handleConfetti}
+                  size="lg"
+                  className="h-14 px-10 text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.6)] transition-all hover:scale-105 active:scale-95"
+                >
+                  🎊 Launch Celebration
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Countdown Card */}
+          <Card className="glass-card shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.5)] animate-slideUp">
+            <CardContent className="p-8 md:p-12 space-y-8">
+              <div className="text-center">
+                <h2 className="text-3xl md:text-4xl font-black text-foreground mb-2">
+                  Countdown to the <span className="gradient-text">Big Day</span>
+                </h2>
+              </div>
+              <CountdownTimer targetDate={BIRTHDAY_DATE} />
+            </CardContent>
+          </Card>
+        </div>
+      </main>
     </div>
   );
 };

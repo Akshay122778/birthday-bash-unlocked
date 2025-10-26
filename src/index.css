@@ -8,51 +8,43 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 98%;
-    --foreground: 0 0% 10%;
+    --background: 280 60% 8%;
+    --foreground: 330 100% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
+    --card: 280 50% 15%;
+    --card-foreground: 330 100% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    --popover: 280 50% 15%;
+    --popover-foreground: 330 100% 98%;
 
-    --primary: 330 90% 55%;
+    --primary: 330 85% 60%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 270 70% 60%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 0 0% 92%;
-    --muted-foreground: 0 0% 45%;
+    --muted: 280 40% 25%;
+    --muted-foreground: 330 30% 70%;
 
-    --accent: 45 95% 60%;
+    --accent: 45 100% 60%;
     --accent-foreground: 0 0% 10%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 90%;
-    --input: 0 0% 95%;
-    --ring: 330 90% 55%;
+    --border: 330 50% 40%;
+    --input: 280 40% 20%;
+    --ring: 330 85% 60%;
 
     --radius: 1rem;
-
-    /* Dark sections */
-    --dark-bg: 0 0% 12%;
-    --dark-foreground: 0 0% 98%;
     
-    /* Badge colors */
-    --badge-bg: 0 0% 88%;
-    --badge-foreground: 0 0% 30%;
-    
-    /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(330 90% 55%), hsl(270 70% 60%));
-    --gradient-accent: linear-gradient(135deg, hsl(330 90% 55%), hsl(45 95% 60%));
+    /* Celebration gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(330 85% 60%), hsl(270 70% 60%));
+    --gradient-celebration: linear-gradient(135deg, hsl(330 85% 60%), hsl(45 100% 60%));
     
     /* Shadows */
-    --shadow-celebration: 0 20px 60px -15px hsl(330 90% 55% / 0.4);
-    --shadow-soft: 0 4px 20px hsl(0 0% 0% / 0.08);
+    --shadow-glow: 0 20px 60px -15px hsl(330 85% 60% / 0.5);
+    --shadow-card: 0 8px 30px hsl(0 0% 0% / 0.3);
   }
 }
 
@@ -68,23 +60,7 @@ All colors MUST be HSL.
 
 @layer utilities {
   .badge-pill {
-    @apply inline-block px-6 py-2 bg-muted text-muted-foreground rounded-full text-sm font-medium tracking-wide;
-  }
-  
-  .wave-divider {
-    position: relative;
-    overflow: hidden;
-  }
-  
-  .wave-divider::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100px;
-    background: hsl(var(--background));
-    clip-path: ellipse(100% 100% at 50% 100%);
+    @apply inline-block px-6 py-2.5 bg-muted/80 text-muted-foreground rounded-full text-sm font-semibold tracking-wide backdrop-blur-sm;
   }
   
   .gradient-text {
@@ -93,15 +69,23 @@ All colors MUST be HSL.
   }
   
   .text-highlight {
-    @apply font-bold text-foreground;
+    @apply font-bold gradient-text;
   }
   
-  .section-dark {
-    @apply bg-[hsl(var(--dark-bg))] text-[hsl(var(--dark-foreground))];
+  .glass-card {
+    @apply bg-card/90 backdrop-blur-xl border-2 border-border/40 rounded-2xl shadow-[0_8px_30px_hsl(0_0%_0%_/_0.3)];
+  }
+  
+  .glass-card-hover {
+    @apply glass-card hover:border-primary/60 hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.5)] transition-all duration-300 hover:scale-[1.02];
   }
 
   .animate-float {
     animation: float 8s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   .animate-fadeIn {
