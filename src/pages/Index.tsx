@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 // Password for accessing the website
-const CORRECT_PASSWORD = "birthday2025";
+const CORRECT_PASSWORD = "Laks1234";
 
 // Birthday date (October 27, 2025)
 const BIRTHDAY_DATE = new Date("2025-10-27T00:00:00").getTime();
@@ -303,7 +303,7 @@ const Index = () => {
                 <h1 className="text-5xl md:text-7xl font-black text-foreground leading-tight">
                   Happy Birthday
                   <br />
-                  <span className="gradient-text font-display">Ananya</span> 🎉
+                  <span className="gradient-text font-display">Laksitha</span> 🎉
                 </h1>
               </div>
 
