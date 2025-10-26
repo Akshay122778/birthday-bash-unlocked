@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
 // Password for accessing the website
@@ -24,31 +24,20 @@ const AdvancedConfetti = ({ confettiKey }: { confettiKey: boolean }) => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const colors = [
-      "#FF1493",
-      "#FFD700",
-      "#00CED1",
-      "#FF69B4",
-      "#00FF00",
-      "#FF4500",
-      "#9370DB",
-      "#00BFFF",
-      "#FF6347",
-      "#32CD32",
-    ];
+    const colors = ["#f472b6", "#a855f7", "#fbbf24", "#ec4899", "#8b5cf6"];
     const shapes = ["square", "circle", "triangle", "star"];
 
     const createConfetti = () => {
-      for (let i = 0; i < 500; i++) {
+      for (let i = 0; i < 400; i++) {
         particlesRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height - canvas.height,
-          vx: (Math.random() - 0.5) * 12,
-          vy: Math.random() * 8 + 6,
-          size: Math.random() * 12 + 5,
+          vx: (Math.random() - 0.5) * 10,
+          vy: Math.random() * 6 + 4,
+          size: Math.random() * 10 + 4,
           color: colors[Math.floor(Math.random() * colors.length)],
           rotation: Math.random() * Math.PI * 2,
-          rotationSpeed: (Math.random() - 0.5) * 0.3,
+          rotationSpeed: (Math.random() - 0.5) * 0.25,
           shape: shapes[Math.floor(Math.random() * shapes.length)],
           life: 1,
           decay: Math.random() * 0.0008 + 0.0002,
@@ -129,31 +118,46 @@ const AdvancedConfetti = ({ confettiKey }: { confettiKey: boolean }) => {
     };
   }, [confettiKey]);
 
-  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-40" />;
+  return <canvas ref={canvasRef} className="fixed inset-0 pointer-events-none z-50" />;
 };
 
 const FloatingParticles = () => {
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none">
-      {[...Array(80)].map((_, i) => (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-40">
+      {[...Array(50)].map((_, i) => (
         <div
           key={i}
           className="absolute rounded-full animate-float"
           style={{
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            width: `${Math.random() * 8 + 2}px`,
-            height: `${Math.random() * 8 + 2}px`,
+            width: `${Math.random() * 6 + 2}px`,
+            height: `${Math.random() * 6 + 2}px`,
             background: ["hsl(var(--primary))", "hsl(var(--accent))", "hsl(var(--secondary))"][
               Math.floor(Math.random() * 3)
             ],
-            animationDelay: `${Math.random() * 5}s`,
-            animationDuration: `${6 + Math.random() * 10}s`,
-            opacity: Math.random() * 0.6 + 0.2,
-            boxShadow: `0 0 ${Math.random() * 20 + 10}px currentColor`,
+            animationDelay: `${Math.random() * 8}s`,
+            animationDuration: `${8 + Math.random() * 8}s`,
           }}
         />
       ))}
+    </div>
+  );
+};
+
+const WaveDivider = ({ flip = false }: { flip?: boolean }) => {
+  return (
+    <div className={`absolute left-0 w-full h-24 ${flip ? 'top-0' : 'bottom-0'} overflow-hidden ${flip ? 'rotate-180' : ''}`}>
+      <svg
+        viewBox="0 0 1200 120"
+        preserveAspectRatio="none"
+        className="relative block w-full h-full"
+      >
+        <path
+          d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+          className="fill-background"
+        />
+      </svg>
     </div>
   );
 };
@@ -167,52 +171,72 @@ const PasswordGate = ({ onUnlock }: { onUnlock: () => void }) => {
     if (password === CORRECT_PASSWORD) {
       onUnlock();
     } else {
-      setError("❌ Incorrect password. Try again!");
+      setError("Incorrect password. Try again!");
       setPassword("");
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-background flex items-center justify-center z-50 overflow-hidden p-4">
+    <div className="fixed inset-0 section-dark flex items-center justify-center z-50 overflow-hidden">
       <FloatingParticles />
-      <Card className="glass-card-hover max-w-md w-full relative z-10 celebration-glow">
-        <CardHeader className="text-center space-y-4">
-          <div className="mx-auto animate-bounce">
-            <div className="text-8xl drop-shadow-lg">🎂</div>
+      
+      {/* Wavy bottom */}
+      <WaveDivider />
+      
+      <div className="relative z-10 w-full max-w-md px-6 animate-fadeIn">
+        <div className="text-center space-y-8">
+          {/* Emoji */}
+          <div className="text-8xl animate-bounce">🎂</div>
+          
+          {/* Badge */}
+          <div className="flex justify-center">
+            <span className="badge-pill">Special Access</span>
           </div>
-          <CardTitle className="text-4xl md:text-5xl font-bold gradient-text">
-            Birthday Surprise
-          </CardTitle>
-          <CardDescription className="text-foreground/80 text-base">
-            Enter the password to unlock the celebration
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Input
-                type="password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError("");
-                }}
-                placeholder="Enter password..."
-                className="text-center text-lg h-12 bg-input/50 border-border focus:border-primary transition-all"
-              />
-              {error && (
-                <p className="text-destructive text-sm text-center animate-pulse">{error}</p>
-              )}
-            </div>
-            <Button
-              type="submit"
-              className="w-full h-12 text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:shadow-celebration transition-all"
-            >
-              Unlock 🔓
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+          
+          {/* Heading */}
+          <div className="space-y-4">
+            <h1 className="text-5xl md:text-6xl font-black text-[hsl(var(--dark-foreground))] leading-tight">
+              Birthday
+              <br />
+              <span className="gradient-text">Celebration</span>
+            </h1>
+            <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full" />
+          </div>
+          
+          {/* Password form */}
+          <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-2xl">
+            <CardContent className="p-8">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-[hsl(var(--dark-foreground))/80]">
+                    Enter Password
+                  </label>
+                  <Input
+                    type="password"
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      setError("");
+                    }}
+                    placeholder="••••••••"
+                    className="h-12 text-center text-lg bg-white/10 border-white/30 text-white placeholder:text-white/50 focus:border-primary transition-all"
+                  />
+                  {error && (
+                    <p className="text-destructive text-sm text-center">{error}</p>
+                  )}
+                </div>
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="w-full h-12 text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:opacity-90 transition-all shadow-lg"
+                >
+                  Unlock Celebration 🔓
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 };
@@ -249,20 +273,25 @@ const CountdownTimer = ({ targetDate }: { targetDate: number }) => {
   }, [targetDate]);
 
   const TimeUnit = ({ value, label }: { value: number; label: string }) => (
-    <Card className="glass-card-hover text-center min-w-[80px] md:min-w-[100px]">
-      <CardContent className="p-4 md:p-6">
-        <div className="text-3xl md:text-5xl font-black gradient-text">
-          {String(value).padStart(2, "0")}
-        </div>
-        <div className="text-xs md:text-sm text-muted-foreground uppercase tracking-widest font-bold mt-2">
-          {label}
-        </div>
-      </CardContent>
-    </Card>
+    <div className="flex flex-col items-center gap-2">
+      <div className="relative group">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all" />
+        <Card className="relative bg-card border-2 border-border hover:border-primary/50 transition-all shadow-soft hover:shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.3)] min-w-[70px] md:min-w-[90px]">
+          <CardContent className="p-4 md:p-6">
+            <div className="text-3xl md:text-5xl font-black gradient-text">
+              {String(value).padStart(2, "0")}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+      <span className="text-xs md:text-sm font-semibold text-muted-foreground uppercase tracking-widest">
+        {label}
+      </span>
+    </div>
   );
 
   return (
-    <div className="flex justify-center gap-2 md:gap-4 flex-wrap">
+    <div className="flex justify-center gap-3 md:gap-6 flex-wrap">
       <TimeUnit value={time.days} label="Days" />
       <TimeUnit value={time.hours} label="Hours" />
       <TimeUnit value={time.minutes} label="Minutes" />
@@ -284,62 +313,97 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-hidden">
+    <div className="min-h-screen bg-background overflow-hidden">
       <FloatingParticles />
       {triggerConfetti && <AdvancedConfetti confettiKey={triggerConfetti} />}
 
-      <main className="relative min-h-screen flex items-center justify-center p-4 md:p-8">
-        <div className="relative z-10 w-full max-w-4xl mx-auto space-y-8">
-          {/* Hero Card */}
-          <Card className="glass-card celebration-glow">
-            <CardHeader className="text-center space-y-6 pb-4">
-              <div className="space-y-2 animate-fadeIn">
-                <CardTitle className="text-4xl md:text-6xl font-black gradient-text hover-text-effect">
-                  Happy Birthday Ananya! 🎉
-                </CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <Card className="glass-card-hover">
-                <CardContent className="p-6 md:p-8">
-                  <p className="text-sm md:text-lg text-foreground/90 leading-relaxed font-medium text-center">
-                    "Another year older, another year wiser, another year more beautiful. Today is your day to shine, to
-                    celebrate all the amazing things you've accomplished, and to look forward to the incredible adventures
-                    ahead. Make this birthday unforgettable!"
-                  </p>
-                  <div className="mt-6 flex gap-4 justify-center text-4xl md:text-5xl">
-                    <span className="hover:scale-125 transition-transform cursor-pointer animate-pulse-slow">✨</span>
-                    <span className="hover:scale-125 transition-transform cursor-pointer animate-pulse-slow" style={{ animationDelay: '0.5s' }}>🎉</span>
-                    <span className="hover:scale-125 transition-transform cursor-pointer animate-pulse-slow" style={{ animationDelay: '1s' }}>💖</span>
-                  </div>
-                </CardContent>
-              </Card>
+      {/* Hero Section with Dark Background */}
+      <section className="section-dark relative min-h-[60vh] flex items-center justify-center py-20 md:py-32">
+        <WaveDivider />
+        
+        <div className="relative z-10 w-full max-w-4xl mx-auto px-6 text-center space-y-8 animate-fadeIn">
+          {/* Badge */}
+          <div>
+            <span className="badge-pill">October 27, 2025</span>
+          </div>
+          
+          {/* Main Heading */}
+          <div className="space-y-6">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-[hsl(var(--dark-foreground))] leading-[1.1]">
+              Celebrating
+              <br />
+              <span className="gradient-text font-display">Ananya's Birthday</span>
+            </h1>
+            <div className="flex justify-center">
+              <div className="w-32 h-1.5 bg-gradient-to-r from-primary via-accent to-secondary rounded-full" />
+            </div>
+          </div>
 
-              <div className="flex justify-center">
-                <Button
-                  onClick={handleConfetti}
-                  size="lg"
-                  className="text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:shadow-celebration transition-all hover:scale-105 active:scale-95 px-8"
-                >
-                  🎊 Launch Celebration
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Countdown Card */}
-          <Card className="glass-card celebration-glow">
-            <CardHeader className="text-center pb-4">
-              <CardTitle className="text-2xl md:text-3xl font-black gradient-text hover-text-effect">
-                Countdown to the Big Day
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CountdownTimer targetDate={BIRTHDAY_DATE} />
-            </CardContent>
-          </Card>
+          {/* Scroll indicator */}
+          <div className="pt-12">
+            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2 mx-auto">
+              <div className="w-1.5 h-3 bg-white/50 rounded-full animate-bounce" />
+            </div>
+          </div>
         </div>
-      </main>
+      </section>
+
+      {/* Content Section with Light Background */}
+      <section className="relative bg-background py-16 md:py-24">
+        <div className="w-full max-w-4xl mx-auto px-6 space-y-12">
+          
+          {/* Message Card */}
+          <div className="animate-slideUp">
+            <Card className="bg-card border-2 border-border hover:border-primary/30 transition-all shadow-soft hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.2)]">
+              <CardContent className="p-8 md:p-12">
+                <p className="text-lg md:text-2xl leading-relaxed text-center">
+                  I'm celebrating <span className="text-highlight">another year</span> with{" "}
+                  <span className="text-highlight">incredible memories</span> and{" "}
+                  <span className="text-highlight">amazing experiences</span>, looking forward to{" "}
+                  <span className="text-highlight">new adventures</span> and building{" "}
+                  <span className="text-highlight">unforgettable moments</span>.
+                </p>
+                
+                {/* Emojis */}
+                <div className="flex justify-center gap-6 mt-8 text-5xl">
+                  <span className="hover:scale-125 transition-transform cursor-pointer">✨</span>
+                  <span className="hover:scale-125 transition-transform cursor-pointer">🎉</span>
+                  <span className="hover:scale-125 transition-transform cursor-pointer">💖</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* CTA Button */}
+          <div className="flex justify-center animate-slideUp" style={{ animationDelay: '0.2s' }}>
+            <Button
+              onClick={handleConfetti}
+              size="lg"
+              className="h-14 px-10 text-lg font-bold bg-gradient-to-r from-primary to-secondary hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.4)] transition-all hover:scale-105 active:scale-95"
+            >
+              🎊 Launch Celebration
+            </Button>
+          </div>
+
+          {/* Countdown Section */}
+          <div className="pt-8 animate-slideUp" style={{ animationDelay: '0.4s' }}>
+            <div className="text-center mb-8">
+              <h2 className="text-3xl md:text-4xl font-black mb-2">
+                Countdown to the <span className="gradient-text">Big Day</span>
+              </h2>
+              <div className="flex justify-center mt-4">
+                <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary rounded-full" />
+              </div>
+            </div>
+            <CountdownTimer targetDate={BIRTHDAY_DATE} />
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-8 text-center text-muted-foreground text-sm">
+        <p>Made with 💖 for Ananya's special day</p>
+      </footer>
     </div>
   );
 };

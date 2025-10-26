@@ -8,58 +8,51 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 280 60% 8%;
-    --foreground: 330 100% 98%;
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
 
-    --card: 280 50% 12%;
-    --card-foreground: 330 100% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
 
-    --popover: 280 50% 12%;
-    --popover-foreground: 330 100% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
 
-    --primary: 330 100% 65%;
-    --primary-foreground: 330 100% 98%;
+    --primary: 330 90% 55%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 270 60% 55%;
-    --secondary-foreground: 330 100% 98%;
+    --secondary: 270 70% 60%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 280 40% 20%;
-    --muted-foreground: 330 50% 75%;
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 45%;
 
-    --accent: 45 100% 60%;
-    --accent-foreground: 280 60% 8%;
+    --accent: 45 95% 60%;
+    --accent-foreground: 0 0% 10%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 330 100% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 330 80% 50%;
-    --input: 280 40% 20%;
-    --ring: 330 100% 65%;
+    --border: 0 0% 90%;
+    --input: 0 0% 95%;
+    --ring: 330 90% 55%;
 
     --radius: 1rem;
 
-    /* Celebration theme colors */
-    --celebration-pink: 330 100% 65%;
-    --celebration-purple: 270 60% 55%;
-    --celebration-gold: 45 100% 60%;
-    --celebration-light: 330 100% 98%;
+    /* Dark sections */
+    --dark-bg: 0 0% 12%;
+    --dark-foreground: 0 0% 98%;
     
-    /* Glass card effects */
-    --glass-bg: 280 50% 12%;
-    --glass-border: 330 80% 50%;
-    --glass-highlight: 330 100% 85%;
+    /* Badge colors */
+    --badge-bg: 0 0% 88%;
+    --badge-foreground: 0 0% 30%;
     
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(330 100% 65%), hsl(270 60% 55%));
-    --gradient-card: linear-gradient(135deg, hsl(280 50% 12% / 0.9), hsl(330 80% 20% / 0.85));
-    --gradient-glow: linear-gradient(135deg, hsl(330 100% 65% / 0.4), hsl(270 60% 55% / 0.4));
+    --gradient-primary: linear-gradient(135deg, hsl(330 90% 55%), hsl(270 70% 60%));
+    --gradient-accent: linear-gradient(135deg, hsl(330 90% 55%), hsl(45 95% 60%));
     
     /* Shadows */
-    --shadow-celebration: 0 10px 40px -10px hsl(330 100% 65% / 0.5);
-    --shadow-glow: 0 0 60px hsl(330 100% 65% / 0.3);
-    
-    /* Animations */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-celebration: 0 20px 60px -15px hsl(330 90% 55% / 0.4);
+    --shadow-soft: 0 4px 20px hsl(0 0% 0% / 0.08);
   }
 }
 
@@ -69,63 +62,83 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
   }
 }
 
 @layer utilities {
-  .glass-card {
-    @apply bg-card/90 backdrop-blur-xl border-2 border-border/60 rounded-2xl shadow-xl;
+  .badge-pill {
+    @apply inline-block px-6 py-2 bg-muted text-muted-foreground rounded-full text-sm font-medium tracking-wide;
   }
   
-  .glass-card-hover {
-    @apply glass-card hover:border-primary/80 hover:shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.5)] transition-all duration-300 hover:scale-[1.02];
+  .wave-divider {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .wave-divider::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: hsl(var(--background));
+    clip-path: ellipse(100% 100% at 50% 100%);
   }
   
   .gradient-text {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-primary via-foreground to-primary;
+    @apply text-transparent bg-clip-text;
+    background-image: var(--gradient-primary);
   }
   
-  .gradient-border {
-    @apply border-2 border-transparent bg-gradient-to-r from-primary to-secondary bg-clip-border;
+  .text-highlight {
+    @apply font-bold text-foreground;
   }
   
-  .celebration-glow {
-    @apply shadow-[0_0_60px_hsl(var(--primary)/0.3)];
+  .section-dark {
+    @apply bg-[hsl(var(--dark-bg))] text-[hsl(var(--dark-foreground))];
   }
 
   .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  .animate-pulse-slow {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    animation: float 8s ease-in-out infinite;
   }
 
   .animate-fadeIn {
     animation: fadeIn 1s ease-out;
   }
 
-  .hover-text-effect {
-    @apply transition-all duration-300 hover:scale-105 hover:drop-shadow-[0_0_20px_hsl(var(--primary)/0.5)];
+  .animate-slideUp {
+    animation: slideUp 0.8s ease-out;
   }
 }
 
 @keyframes float {
   0%, 100% {
     transform: translateY(0px) rotate(0deg);
-    opacity: 0.6;
+    opacity: 0.5;
   }
   50% {
-    transform: translateY(-20px) rotate(180deg);
-    opacity: 0.3;
+    transform: translateY(-30px) rotate(180deg);
+    opacity: 0.2;
   }
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(50px);
   }
   to {
     opacity: 1;
